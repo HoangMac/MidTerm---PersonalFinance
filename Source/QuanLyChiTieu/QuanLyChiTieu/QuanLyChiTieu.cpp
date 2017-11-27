@@ -761,6 +761,9 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 		hStatic = GetDlgItem(hDlg, IDC_STATIC_ST);
 		Static_SetText(hStatic, L"Số Tiền");
 
+		hEdit = GetDlgItem(hDlg, IDC_EDIT4);
+		SetWindowLong(hEdit, GWL_STYLE, WS_CHILD | WS_VISIBLE | ES_NUMBER);
+
 		return (INT_PTR)TRUE;
 
 	case WM_COMMAND:
@@ -770,22 +773,45 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 			{
 				hComboBox = GetDlgItem(hDlg, IDC_CB_LOAICT);
 				nCursel = ComboBox_GetCurSel(hComboBox);
-
+				if (nCursel == -1)
+				{
+					MessageBox(hDlg, L"Bạn phải chọn loại chi tiêu!", 0, MB_ICONERROR);
+					break;
+				}
+					
 				hEdit = GetDlgItem(hDlg, IDC_EDIT3);
 				size = GetWindowTextLength(hEdit);
 				buffer = new wchar_t[size + 1];
 				GetWindowText(hEdit, buffer, size + 1);
 				wstring noidung(buffer);
+				if (noidung == L"")
+				{
+					MessageBox(hDlg, L"Bạn không được để trống!", 0, MB_ICONERROR);
+					break;
+				}
 
 				hEdit = GetDlgItem(hDlg, IDC_EDIT4);
 				size = GetWindowTextLength(hEdit);
 				buffer = new wchar_t[size + 1];
 				GetWindowText(hEdit, buffer, size + 1);
+				wstring st(buffer);
 				sotien = _wtoi(buffer);
+				if (st == L"")
+				{
+					MessageBox(hDlg, L"Bạn không được để trống!", 0, MB_ICONERROR);
+					break;
+				}
+				if (sotien < 0)
+				{
+					MessageBox(hDlg, L"Số tiền không thể là số âm!", 0, MB_ICONERROR);
+					break;
+				}
 
 				chitieu = new ChiTieu;
 				chitieu->SetChiTieu(nCursel, sotien, noidung);
 				ThemChiTieu(Database, chitieu);
+
+
 
 				EndDialog(hDlg, LOWORD(wParam));
 				return (INT_PTR)TRUE;
