@@ -585,7 +585,6 @@ BOOL OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 
 void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-	HTREEITEM NodeSelected;
 	switch (id)
 	{
 	case IDM_ABOUT:
