@@ -795,17 +795,17 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 				buffer = new wchar_t[size + 1];
 				GetWindowText(hEdit, buffer, size + 1);
 				wstring st(buffer);
-				sotien = _wtoi(buffer);
 				if (st == L"")
 				{
 					MessageBox(hDlg, L"Bạn không được để trống!", 0, MB_ICONERROR);
 					break;
 				}
-				if (sotien < 0)
+				if (st.length() >= 10 && st[0] > L'2')
 				{
-					MessageBox(hDlg, L"Số tiền không thể là số âm!", 0, MB_ICONERROR);
+					MessageBox(hDlg, L"Bạn không phải là Bill Gate! Hãy thành thực đi và nhập lại số tiền!", 0, MB_ICONERROR);
 					break;
 				}
+				sotien = _wtoi(buffer);
 
 				chitieu = new ChiTieu;
 				chitieu->SetChiTieu(nCursel, sotien, noidung);
